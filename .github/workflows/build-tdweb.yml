@@ -59,7 +59,7 @@ jobs:
         run: |
           cd emsdk
           source ./emsdk_env.sh
-          cd ../td/example/web
+          cd ../example/web
           ./build-openssl.sh
         shell: bash
         
@@ -67,7 +67,7 @@ jobs:
         run: |
           cd emsdk
           source ./emsdk_env.sh
-          cd ../td/example/web
+          cd ../example/web
           ./build-tdlib.sh
         shell: bash
         
@@ -75,7 +75,7 @@ jobs:
         run: |
           cd emsdk
           source ./emsdk_env.sh
-          cd ../td/example/web
+          cd ../example/web
           ./copy-tdlib.sh
         shell: bash
         
@@ -83,7 +83,7 @@ jobs:
         run:  |
           cd emsdk
           source ./emsdk_env.sh
-          cd ../td/example/web
+          cd ../example/web
           ./build-tdweb.sh
    
 
