@@ -1,0 +1,86 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build TDWeb
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: repo
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 15
+      
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          
+      - name: Install webpack
+        run: npm install -g webpack
+        
+      - name: Checkout EMSDK
+        uses: actions/checkout@v2
+        with:
+          repository: emscripten-core/emsdk
+          path: emsdk
+        
+      - name: Set-up EMSDK
+        run: |
+          cd emsdk
+          ./emsdk install 2.0.6
+          ./emsdk activate 2.0.6
+          cd ..
+        shell: bash
+        
+      - name: Install TDLib dependencies
+        run: sudo apt install cmake make clang openssl zlib1g gperf php
+        shell: bash
+      
+      
+      - name: Patch build script
+        run: |
+          sed -i -- 's/set(TD_LINKER_FLAGS "-Wl,--gc-sections -Wl,--exclude-libs,ALL")/# set(TD_LINKER_FLAGS "-Wl,--gc-sections -Wl,--exclude-libs,ALL")/g' "${GITHUB_WORKSPACE}/td/CMake/TdSetUpCompiler.cmake"
+        shell: bash
+      
+      - name: Build OpenSSL
+        run: |
+          cd emsdk
+          source ./emsdk_env.sh
+          cd ../td/example/web
+          ./build-openssl.sh
+        shell: bash
+        
+      - name: Build TDLib
+        run: |
+          cd emsdk
+          source ./emsdk_env.sh
+          cd ../td/example/web
+          ./build-tdlib.sh
+        shell: bash
+        
+      - name: Copy TDLib
+        run: |
+          cd emsdk
+          source ./emsdk_env.sh
+          cd ../td/example/web
+          ./copy-tdlib.sh
+        shell: bash
+        
+      - name: Build TDWeb
+        run:  |
+          cd emsdk
+          source ./emsdk_env.sh
+          cd ../td/example/web
+          ./build-tdweb.sh
+   
+
+      
