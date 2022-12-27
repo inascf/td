@@ -52,7 +52,7 @@ jobs:
       
       - name: Patch build script
         run: |
-          sed -i -- 's/set(TD_LINKER_FLAGS "-Wl,--gc-sections -Wl,--exclude-libs,ALL")/# set(TD_LINKER_FLAGS "-Wl,--gc-sections -Wl,--exclude-libs,ALL")/g' "${GITHUB_WORKSPACE}/td/CMake/TdSetUpCompiler.cmake"
+          sed -i -- 's/set(TD_LINKER_FLAGS "-Wl,--gc-sections -Wl,--exclude-libs,ALL")/# set(TD_LINKER_FLAGS "-Wl,--gc-sections -Wl,--exclude-libs,ALL")/g' "${GITHUB_WORKSPACE}/CMake/TdSetUpCompiler.cmake"
         shell: bash
       
       - name: Build OpenSSL
